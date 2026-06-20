@@ -1,0 +1,27 @@
+{
+  "name": "Mudanzas Guevara",
+  "short_name": "MudanzasG",
+  "description": "Mudanzas y Logística en Guayaquil, Quito y todo el Ecuador. Cotización gratis.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0A0A",
+  "theme_color": "#D4A853",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "utilities"],
+  "lang": "es",
+  "dir": "ltr"
+}
