@@ -108,12 +108,12 @@ const TESTIMONIALS = [
 ] as const;
 
 const TRUST_BADGES = [
-  { icon: ShieldCheck, label: 'Mercancía Asegurada' },
-  { icon: Clock, label: 'Puntualidad Garantizada' },
-  { icon: Award, label: 'Empresa Registrada' },
-  { icon: Users, label: 'Personal Capacitado' },
-  { icon: Phone, label: 'Soporte 24/7' },
-  { icon: MapPin, label: 'Cobertura Nacional' },
+  { icon: ShieldCheck, label: 'Mercancía Asegurada', desc: 'Tu patrimonio protegido' },
+  { icon: Clock, label: 'Puntualidad Garantizada', desc: 'Siempre a tiempo' },
+  { icon: Award, label: 'Empresa Registrada', desc: 'Legal y confiable' },
+  { icon: Users, label: 'Personal Capacitado', desc: 'Equipo profesional' },
+  { icon: Phone, label: 'Soporte 24/7', desc: 'Siempre disponibles' },
+  { icon: MapPin, label: 'Cobertura Nacional', desc: 'Todo el Ecuador' },
 ] as const;
 
 const GALLERY_IMAGES = [
@@ -430,28 +430,31 @@ function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-9 flex flex-col sm:flex-row gap-3 justify-center"
+            className="mt-9 flex flex-col sm:flex-row gap-3 justify-center items-center"
           >
-            <GoldButton href={WHATSAPP_LINK} external>
+            <GoldButton href={WHATSAPP_LINK} external className="w-full sm:w-auto">
               <MessageCircle className="h-4 w-4" />
               Cotiza por WhatsApp
             </GoldButton>
-            <OutlineButton href={`tel:${PHONE_1_TEL}`}>
+            <OutlineButton href={`tel:${PHONE_1_TEL}`} className="w-full sm:w-auto">
               <Phone className="h-4 w-4 text-gold" />
               {PHONE_1}
             </OutlineButton>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 text-xs text-white/60"
+            className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-3 w-full"
           >
-            {TRUST_BADGES.slice(0, 3).map((b) => (
-              <div key={b.label} className="inline-flex items-center gap-2">
-                <b.icon className="h-4 w-4 text-gold" />
-                {b.label}
+            {TRUST_BADGES.slice(0, 4).map((b) => (
+              <div key={b.label} className="group flex flex-col items-center text-center rounded-xl border border-white/[0.08] bg-white/[0.04] backdrop-blur-sm px-3 py-3 transition-all hover:border-gold/25 hover:bg-white/[0.07]">
+                <div className="mb-2 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gold/[0.1] border border-gold/20 text-gold">
+                  <b.icon className="h-4 w-4" />
+                </div>
+                <span className="text-[11px] sm:text-xs font-semibold text-white/90 leading-tight">{b.label}</span>
+                <span className="mt-0.5 text-[10px] text-white/50 leading-tight">{b.desc}</span>
               </div>
             ))}
           </motion.div>
@@ -500,14 +503,24 @@ function Stats() {
 // ─── Trust Badges ───────────────────────────────────────────────
 function TrustBadges() {
   return (
-    <section className="py-8 bg-dark-900 border-b border-white/[0.06]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 max-w-5xl mx-auto">
-          {TRUST_BADGES.map((b) => (
-            <div key={b.label} className="flex flex-col items-center gap-2 text-center rounded-xl border border-white/[0.06] bg-dark-800 px-3 py-4">
-              <b.icon className="h-5 w-5 text-gold" />
-              <span className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-wider leading-tight">{b.label}</span>
-            </div>
+    <section className="py-12 sm:py-16 bg-dark-900 border-y border-white/[0.06]">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+          {TRUST_BADGES.map((b, i) => (
+            <motion.div
+              key={b.label}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.07 }}
+              className="group flex flex-col items-center text-center rounded-2xl border border-white/[0.06] bg-dark-800 p-5 sm:p-6 transition-all hover:border-gold/25 hover:bg-dark-700"
+            >
+              <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gold/[0.08] border border-gold/15 text-gold transition-all group-hover:bg-gold/15 group-hover:border-gold/30">
+                <b.icon className="h-5 w-5" />
+              </div>
+              <span className="text-xs sm:text-sm font-semibold text-white leading-tight">{b.label}</span>
+              <span className="mt-1 text-[11px] text-muted-foreground leading-tight">{b.desc}</span>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -1144,6 +1157,16 @@ function QuoteCalculator() {
 
 // ─── Contact ────────────────────────────────────────────────────
 function Contact() {
+  const [msgData, setMsgData] = useState({ nombre: '', telefono: '', mensaje: '' });
+
+  const handleSendWhatsApp = () => {
+    const msg = `Hola Mudanzas Guevara, soy ${msgData.nombre || '[tu nombre]'}.\n` +
+      `📞 Teléfono: ${msgData.telefono || '[tu teléfono]'}\n` +
+      `📝 Mensaje: ${msgData.mensaje || 'Me interesa una cotización para mudanza.'}\n\n` +
+      `Por favor confírmenme disponibilidad. ¡Gracias!`;
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+  };
+
   const inputCls =
     'w-full rounded-lg border border-white/[0.08] bg-dark-900 px-4 py-3 text-sm text-white placeholder:text-muted-foreground/60 focus:border-gold/40 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors';
 
@@ -1156,146 +1179,109 @@ function Contact() {
             Estamos disponibles para ti
           </h2>
           <p className="mt-4 text-muted-foreground text-base sm:text-lg leading-relaxed">
-            Cotización gratis, respuesta inmediata. Déjanos tus datos o escríbenos directo por WhatsApp.
+            Cotización gratis, respuesta inmediata. Escríbenos por WhatsApp y te respondemos al instante.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Info cards */}
-          <div className="lg:col-span-1 space-y-3">
-            <a
-              href={`tel:${PHONE_1_TEL}`}
-              className="block rounded-xl border border-white/[0.06] bg-dark-900 p-5 hover:border-gold/25 transition-colors"
-            >
-              <div className="flex items-start gap-3">
-                <div className="h-10 w-10 rounded-lg bg-gold/[0.08] border border-gold/15 flex items-center justify-center text-gold shrink-0">
-                  <Phone className="h-4 w-4" />
-                </div>
-                <div>
-                  <div className="text-[11px] text-muted-foreground uppercase tracking-wider mb-1">Llámanos</div>
-                  <div className="text-sm text-white font-medium">{PHONE_1}</div>
-                  <div className="text-sm text-white/70">{PHONE_2}</div>
-                </div>
-              </div>
-            </a>
-
-            <a
-              href={`mailto:${EMAIL}`}
-              className="block rounded-xl border border-white/[0.06] bg-dark-900 p-5 hover:border-gold/25 transition-colors"
-            >
-              <div className="flex items-start gap-3">
-                <div className="h-10 w-10 rounded-lg bg-gold/[0.08] border border-gold/15 flex items-center justify-center text-gold shrink-0">
-                  <Mail className="h-4 w-4" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-[11px] text-muted-foreground uppercase tracking-wider mb-1">Email</div>
-                  <div className="text-sm text-white font-medium truncate">{EMAIL}</div>
-                </div>
-              </div>
-            </a>
-
-            <div className="rounded-xl border border-white/[0.06] bg-dark-900 p-5">
-              <div className="flex items-start gap-3">
-                <div className="h-10 w-10 rounded-lg bg-gold/[0.08] border border-gold/15 flex items-center justify-center text-gold shrink-0">
-                  <MapPin className="h-4 w-4" />
-                </div>
-                <div>
-                  <div className="text-[11px] text-muted-foreground uppercase tracking-wider mb-1">Oficina</div>
-                  <div className="text-sm text-white leading-relaxed">{ADDRESS}</div>
-                </div>
-              </div>
+        <div className="grid lg:grid-cols-2 gap-6">
+          {/* Formulario que envía por WhatsApp */}
+          <div className="rounded-2xl border border-white/[0.06] bg-dark-900 p-6 sm:p-8 space-y-4">
+            <div className="flex items-center gap-2 mb-2">
+              <MessageCircle className="h-5 w-5 text-gold" />
+              <span className="text-sm font-semibold text-white">Escríbenos por WhatsApp</span>
             </div>
-
-            {/* Horario banner */}
-            <div className="rounded-xl border border-white/[0.06] bg-dark-900 overflow-hidden">
-              <div className="px-5 py-3 bg-gold/[0.04] border-b border-white/[0.06] flex items-center gap-2">
-                <Clock className="h-4 w-4 text-gold" />
-                <span className="text-xs font-semibold text-white uppercase tracking-wider">Horario de atención</span>
-              </div>
-              <div className="grid grid-cols-3 divide-x divide-white/[0.06]">
-                <div className="p-4 text-center">
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Oficina</div>
-                  <div className="text-sm text-white mt-1">Lun - Vie</div>
-                  <div className="text-xs text-gold mt-0.5">9:00 - 17:30</div>
-                </div>
-                <div className="p-4 text-center">
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Mudanzas</div>
-                  <div className="text-sm text-white mt-1">Todos los días</div>
-                  <div className="text-xs text-gold mt-0.5">Previo agendamiento</div>
-                </div>
-                <div className="p-4 text-center">
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Emergencias</div>
-                  <div className="text-sm text-white mt-1">24 / 7</div>
-                  <div className="text-xs text-gold mt-0.5">Siempre activos</div>
-                </div>
-              </div>
+            <div>
+              <label className="block text-xs font-medium text-muted-foreground mb-1.5 uppercase tracking-wider">Nombre</label>
+              <input
+                placeholder="Tu nombre"
+                value={msgData.nombre}
+                onChange={(e) => setMsgData({ ...msgData, nombre: e.target.value })}
+                className={inputCls}
+              />
             </div>
-
-            {/* Redes */}
-            <div className="rounded-xl border border-white/[0.06] bg-dark-900 p-5">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-semibold text-white uppercase tracking-wider">Síguenos</span>
-                <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Redes</span>
-              </div>
-              <div className="flex gap-2">
-                {SOCIAL_LINKS.map((s) => (
-                  <a
-                    key={s.name}
-                    href={s.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={s.name}
-                    className="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.02] py-2.5 text-xs text-white hover:border-gold/30 hover:bg-gold/[0.06] hover:text-gold transition-all"
-                  >
-                    <s.icon className="h-3.5 w-3.5" />
-                    <span className="hidden sm:inline">{s.name}</span>
-                  </a>
-                ))}
-              </div>
+            <div>
+              <label className="block text-xs font-medium text-muted-foreground mb-1.5 uppercase tracking-wider">Teléfono</label>
+              <input
+                placeholder="09xxxxxxxx"
+                value={msgData.telefono}
+                onChange={(e) => setMsgData({ ...msgData, telefono: e.target.value })}
+                className={inputCls}
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-muted-foreground mb-1.5 uppercase tracking-wider">Mensaje</label>
+              <textarea
+                rows={3}
+                placeholder="Cuéntanos sobre tu mudanza: origen, destino, fecha..."
+                value={msgData.mensaje}
+                onChange={(e) => setMsgData({ ...msgData, mensaje: e.target.value })}
+                className={`${inputCls} resize-none`}
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <GoldButton href="#" onClick={(e: React.MouseEvent) => { e.preventDefault(); handleSendWhatsApp(); }} className="w-full sm:w-auto">
+                <MessageCircle className="h-4 w-4" />
+                Enviar por WhatsApp
+              </GoldButton>
+              <OutlineButton href={`tel:${PHONE_1_TEL}`} className="w-full sm:w-auto">
+                <Phone className="h-4 w-4 text-gold" />
+                Llamar ahora
+              </OutlineButton>
             </div>
           </div>
 
-          {/* Form + map */}
-          <div className="lg:col-span-2 space-y-4">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                window.open(WHATSAPP_LINK, '_blank');
-              }}
-              className="rounded-2xl border border-white/[0.06] bg-dark-900 p-6 sm:p-8 space-y-4"
-            >
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-medium text-muted-foreground mb-1.5 uppercase tracking-wider">Nombre</label>
-                  <input required placeholder="Tu nombre" className={inputCls} />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-muted-foreground mb-1.5 uppercase tracking-wider">Teléfono</label>
-                  <input required placeholder="09xxxxxxxx" className={inputCls} />
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1.5 uppercase tracking-wider">Mensaje</label>
-                <textarea
-                  required
-                  rows={4}
-                  placeholder="Cuéntanos sobre tu mudanza: origen, destino, fecha, detalles..."
-                  className={`${inputCls} resize-none`}
-                />
-              </div>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <GoldButton href="#" className="w-full sm:w-auto">
-                  <Send className="h-4 w-4" />
-                  Enviar mensaje
-                </GoldButton>
-                <OutlineButton href={`tel:${PHONE_1_TEL}`} className="w-full sm:w-auto">
-                  <Phone className="h-4 w-4 text-gold" />
-                  Llamar ahora
-                </OutlineButton>
-              </div>
-            </form>
+          {/* Info + mapa */}
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <a
+                href={`tel:${PHONE_1_TEL}`}
+                className="rounded-xl border border-white/[0.06] bg-dark-900 p-4 hover:border-gold/25 transition-colors text-center"
+              >
+                <Phone className="h-5 w-5 text-gold mx-auto mb-2" />
+                <div className="text-[11px] text-muted-foreground uppercase tracking-wider">Llámanos</div>
+                <div className="text-sm text-white font-medium mt-1">{PHONE_1}</div>
+              </a>
+              <a
+                href={`mailto:${EMAIL}`}
+                className="rounded-xl border border-white/[0.06] bg-dark-900 p-4 hover:border-gold/25 transition-colors text-center"
+              >
+                <Mail className="h-5 w-5 text-gold mx-auto mb-2" />
+                <div className="text-[11px] text-muted-foreground uppercase tracking-wider">Email</div>
+                <div className="text-sm text-white font-medium mt-1 truncate">{EMAIL}</div>
+              </a>
+            </div>
 
-            <div className="map-container rounded-2xl overflow-hidden border border-white/[0.06] aspect-[16/9] bg-dark-900">
+            <div className="rounded-xl border border-white/[0.06] bg-dark-900 p-4 text-center">
+              <MapPin className="h-5 w-5 text-gold mx-auto mb-2" />
+              <div className="text-[11px] text-muted-foreground uppercase tracking-wider">Oficina</div>
+              <div className="text-sm text-white mt-1">{ADDRESS}</div>
+            </div>
+
+            <div className="rounded-xl border border-white/[0.06] bg-dark-900 overflow-hidden">
+              <div className="px-4 py-2.5 bg-gold/[0.04] border-b border-white/[0.06] flex items-center justify-center gap-2">
+                <Clock className="h-4 w-4 text-gold" />
+                <span className="text-xs font-semibold text-white uppercase tracking-wider">Horario</span>
+              </div>
+              <div className="grid grid-cols-3 divide-x divide-white/[0.06]">
+                <div className="p-3 text-center">
+                  <div className="text-[10px] text-muted-foreground uppercase">Oficina</div>
+                  <div className="text-xs text-white mt-1">Lun-Vie</div>
+                  <div className="text-xs text-gold">9:00-17:30</div>
+                </div>
+                <div className="p-3 text-center">
+                  <div className="text-[10px] text-muted-foreground uppercase">Mudanzas</div>
+                  <div className="text-xs text-white mt-1">Todos los días</div>
+                  <div className="text-xs text-gold">Agendado</div>
+                </div>
+                <div className="p-3 text-center">
+                  <div className="text-[10px] text-muted-foreground uppercase">Urgencias</div>
+                  <div className="text-xs text-white mt-1">24/7</div>
+                  <div className="text-xs text-gold">Siempre</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="map-container rounded-xl overflow-hidden border border-white/[0.06] aspect-[16/9] bg-dark-900">
               <iframe
                 src="https://www.google.com/maps?q=Calle+1+de+Mayo+1006+Tulcán+Guayaquil+Ecuador&output=embed"
                 className="h-full w-full"
