@@ -113,6 +113,7 @@ const TRUST_BADGES = [
   { icon: Award, label: 'Empresa Registrada' },
   { icon: Users, label: 'Personal Capacitado' },
   { icon: Phone, label: 'Soporte 24/7' },
+  { icon: MapPin, label: 'Cobertura Nacional' },
 ] as const;
 
 const GALLERY_IMAGES = [
@@ -253,13 +254,13 @@ function TopBar() {
   return (
     <div className="hidden md:block border-b border-white/[0.06] bg-dark-900">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between py-2 text-xs">
-        <div className="flex items-center gap-4 text-muted-foreground">
+        <div className="flex items-center gap-4 text-white/70">
           <span className="inline-flex items-center gap-1.5">
             <Clock className="h-3.5 w-3.5 text-gold" />
             Lun-Vie 9:00AM - 5:30PM · Mudanzas todos los días
           </span>
         </div>
-        <div className="flex items-center gap-5 text-muted-foreground">
+        <div className="flex items-center gap-5 text-white/70">
           <a href={`tel:${PHONE_1_TEL}`} className="inline-flex items-center gap-1.5 hover:text-gold transition-colors">
             <Phone className="h-3.5 w-3.5 text-gold" />
             {PHONE_1}
@@ -270,7 +271,7 @@ function TopBar() {
           </a>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-muted-foreground text-[11px] uppercase tracking-wider">Síguenos:</span>
+          <span className="text-white/60 text-[11px] uppercase tracking-wider">Síguenos:</span>
           {SOCIAL_LINKS.map((s) => (
             <a
               key={s.name}
@@ -278,7 +279,7 @@ function TopBar() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={s.name}
-              className="h-7 w-7 rounded-full border border-white/[0.06] flex items-center justify-center text-muted-foreground hover:text-gold hover:border-gold/30 transition-all"
+              className="h-7 w-7 rounded-full border border-white/[0.08] flex items-center justify-center text-white/70 hover:text-gold hover:border-gold/30 transition-all"
             >
               <s.icon className="h-3.5 w-3.5" />
             </a>
@@ -310,16 +311,16 @@ function Navbar() {
       <div className={`transition-all duration-300 ${scrolled ? 'bg-dark-900/95 backdrop-blur-md border-b border-white/[0.06]' : 'bg-transparent'}`}>
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 lg:h-20">
           <a href="#inicio" className="flex items-center gap-3">
-            <img src="/logo-mudanzas-guevara.png" alt="Mudanzas Guevara" className="h-10 w-10 rounded-full ring-1 ring-gold/20" />
+            <img src="/logo-mudanzas-guevara.png" alt="Mudanzas Guevara" className="h-14 w-14 sm:h-16 sm:w-16 rounded-full ring-2 ring-gold/30" />
             <div className="leading-tight">
-              <div className="text-white font-bold text-sm sm:text-base tracking-wide">MUDANZAS GUEVARA</div>
-              <div className="text-gold text-[10px] uppercase tracking-[0.2em]">Logística · Transporte</div>
+              <div className="text-white font-bold text-base sm:text-lg tracking-wide">MUDANZAS GUEVARA</div>
+              <div className="text-gold text-[11px] sm:text-xs uppercase tracking-[0.2em]">Logística · Transporte</div>
             </div>
           </a>
 
           <div className="hidden lg:flex items-center gap-7">
             {NAV_LINKS.map((l) => (
-              <a key={l.href} href={l.href} className="text-sm text-muted-foreground hover:text-gold transition-colors">
+              <a key={l.href} href={l.href} className="text-sm font-medium text-white/80 hover:text-gold transition-colors">
                 {l.label}
               </a>
             ))}
@@ -356,7 +357,7 @@ function Navbar() {
                   key={l.href}
                   href={l.href}
                   onClick={() => setOpen(false)}
-                  className="py-2.5 text-sm text-muted-foreground hover:text-gold border-b border-white/[0.04] last:border-0"
+                  className="py-2.5 text-sm font-medium text-white/80 hover:text-gold border-b border-white/[0.04] last:border-0"
                 >
                   {l.label}
                 </a>
@@ -388,9 +389,8 @@ function Hero() {
         >
           <source src="/video-mudanzas-guevara.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 hero-overlay" />
-        <div className="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/50 to-dark-900/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-dark-900 via-transparent to-dark-900/30" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20 w-full text-center">
@@ -502,9 +502,9 @@ function TrustBadges() {
   return (
     <section className="py-8 bg-dark-900 border-b border-white/[0.06]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-wrap justify-center gap-3 sm:gap-4 max-w-4xl mx-auto">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 max-w-5xl mx-auto">
           {TRUST_BADGES.map((b) => (
-            <div key={b.label} className="flex flex-col items-center gap-2 text-center rounded-xl border border-white/[0.06] bg-dark-800 px-5 py-4 w-[140px] sm:w-[150px]">
+            <div key={b.label} className="flex flex-col items-center gap-2 text-center rounded-xl border border-white/[0.06] bg-dark-800 px-3 py-4">
               <b.icon className="h-5 w-5 text-gold" />
               <span className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-wider leading-tight">{b.label}</span>
             </div>
@@ -1361,10 +1361,10 @@ function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              <img src="/logo-mudanzas-guevara.png" alt="Mudanzas Guevara" className="h-10 w-10 rounded-full ring-1 ring-gold/20" />
+              <img src="/logo-mudanzas-guevara.png" alt="Mudanzas Guevara" className="h-12 w-12 rounded-full ring-2 ring-gold/30" />
               <div className="leading-tight">
                 <div className="text-white font-bold text-sm tracking-wide">MUDANZAS GUEVARA</div>
-                <div className="text-gold text-[10px] uppercase tracking-[0.2em]">Logística · Transporte</div>
+                <div className="text-gold text-[11px] uppercase tracking-[0.2em]">Logística · Transporte</div>
               </div>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
