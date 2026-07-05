@@ -1,6 +1,6 @@
 {
   "name": "mudanzas-guevara",
-  "version": "28.0.0",
+  "version": "30.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000",
@@ -52,7 +52,6 @@
     "react-hook-form": "^7.60.0",
     "react-resizable-panels": "^3.0.3",
     "recharts": "^2.15.4",
-    "sharp": "^0.34.3",
     "sonner": "^2.0.6",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
